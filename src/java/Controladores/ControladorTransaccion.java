@@ -11,7 +11,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
-
+import java.util.ArrayList;
 /**
  *
  * @author Leonardo Martinez
@@ -20,6 +20,7 @@ import javax.inject.Named;
 @SessionScoped
 public class ControladorTransaccion implements Serializable{
     private Transaccion transaccion;
+    private  private int productoId;
     @EJB
     private FachadaTransaccion fachada;
     
@@ -44,5 +45,23 @@ public class ControladorTransaccion implements Serializable{
     
     public List<Transaccion> getTransaccions() {
         return getFachada().findAll();
+    }
+
+     public void setProductoId(int productoId){
+    this.productoId=productoId;
+    }
+    
+    public List<Transaccion> ListaInteresados(){
+       
+    List<Transaccion> listaDeInteresados = new ArrayList<>();
+    int producto;
+    String correo;
+    List<Transaccion> transacciones = getFachada().findAll();    
+    for(int i=0;i<transacciones.size();i++){
+    producto=transacciones.get(i).getFkproducto().getPkproducto();
+        if(producto==this.productoId)
+        listaDeInteresados.add(transacciones.get(i));
+    }
+    return listaDeInteresados;
     }
 }
